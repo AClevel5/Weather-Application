@@ -1,8 +1,16 @@
 //Variables:
-var previousSearchEl = document.querySelector("#prevSearches")
-var searchButton = document.querySelector("#searchButton")
-var inputCity = document.querySelector('#inputCity')
-
+var previousSearchEl = document.querySelector("#prevSearches");
+var searchButton = document.querySelector("#searchButton");
+var inputCity = document.querySelector('#inputCity');
+var latitude = [];
+var longitude = [];
+var apiKey = "30be9d6f81ee076d9023bf7273f7e725";
+var exclude = "hourly,minutely,alerts";
+var cityName = document.querySelector("#cityName");
+var temp = document.querySelector("#temp");
+var wind = document.querySelector("#wind");
+var humidity = document.querySelector("#humidity")
+var uvIndex = document.querySelector("#uvIndex");
 //https://api.openweathermap.org/data/2.5/weather?q=denver&appid=30be9d6f81ee076d9023bf7273f7e725
 
 //Functions:
@@ -11,7 +19,7 @@ function searchFormSubmit(){
     var inputCityText = inputCity.value.trim();
     console.log(inputCityText)
 
-fetch("https://api.openweathermap.org/data/2.5/weather?q=" + inputCityText + "&appid=30be9d6f81ee076d9023bf7273f7e725", {
+fetch("https://api.openweathermap.org/data/2.5/weather?q=" + inputCityText + "&units=metric&appid=" + apiKey, {
   // The browser fetches the resource from the remote server without first looking in the cache.
   // The browser will then update the cache with the downloaded resource.
   cache: 'reload',
@@ -20,9 +28,58 @@ fetch("https://api.openweathermap.org/data/2.5/weather?q=" + inputCityText + "&a
     return response.json();
   })
   .then(function (data) {
-    console.log(data);
+    //console.log(data);
+    cityName.innerHTML = data.name;
+    temp.innerHTML = data.main.temp;
+    wind.innerHTML = data.wind.speed;
+    humidity.innerHTML = data.main.humidity;
+   // uvIndex.innerHTML = data.
+    latitude = data.coord.lat;
+    longitude = data.coord.lon;
+    // console.log(latitude);
+    // console.log(longitude);
+    grabWeatherInfo(latitude, longitude)
   });
 }
+
+function grabWeatherInfo(lat, lon) {
+  fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=" + exclude + "&appid=" + apiKey)
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (data){
+  //console.log(data);
+  uvIndex.innerHTML = data.daily[0].uvi;
+  let filteredArray = data.daily.slice(1, 6);
+  console.log(filteredArray)
+  populateForcastDetails(filteredArray)
+  })
+};
+
+function populateForcastDetails (filteredArray){
+  let forcastDiv = document.querySelector("#forcast");
+  for (let i = 0; i < filteredArray.length; i++) {
+    let parentDiv = document.createElement("div")
+    parentDiv.setAttribute("class","card col-12 col-lg-2");
+   let dateDiv = document.createElement("p");
+   let humidityDiv = document.createElement("p");
+   let tempDiv = document.createElement("p");
+   let windDiv = document.createElement("p");
+   let formattedDate = new Date(filteredArray[i].dt*1000).toISOString().split("T")[0];
+   
+   dateDiv.innerHTML = formattedDate;
+   humidityDiv.innerHTML = filteredArray[i].humidity;
+   tempDiv.innerHTML = filteredArray[i].temp.day;
+   windDiv.innerHTML = filteredArray[i].wind_speed;
+
+   parentDiv.append(dateDiv, humidityDiv, tempDiv, windDiv);
+   forcastDiv.append(parentDiv);
+
+    
+  }
+  
+}
+
 //Pass City into Open Weather API to grab response. Only want Current and Daily info back so need logic to cut out hourly, alerts, & minutely
 //Current update: Grab City (date), Temp, Wind, Humidity, UV index and update into state div
 //Daily update: Grab Date, icon, temp, wind, humidty and create a card per day to store the data
