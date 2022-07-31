@@ -19,6 +19,8 @@ function searchFormSubmit(){
     var inputCityText = inputCity.value.trim();
     console.log(inputCityText)
 
+  if (inputCityText != "")
+
 fetch("https://api.openweathermap.org/data/2.5/weather?q=" + inputCityText + "&units=metric&appid=" + apiKey, {
   // The browser fetches the resource from the remote server without first looking in the cache.
   // The browser will then update the cache with the downloaded resource.
@@ -40,6 +42,8 @@ fetch("https://api.openweathermap.org/data/2.5/weather?q=" + inputCityText + "&u
     // console.log(longitude);
     grabWeatherInfo(latitude, longitude)
   });
+  else
+  alert("Please enter a valid city")
 }
 
 function grabWeatherInfo(lat, lon) {
@@ -60,7 +64,7 @@ function populateForcastDetails (filteredArray){
   let forcastDiv = document.querySelector("#forcast");
   for (let i = 0; i < filteredArray.length; i++) {
     let parentDiv = document.createElement("div")
-    parentDiv.setAttribute("class","card col-12 col-lg-2");
+    parentDiv.setAttribute("class","card custom-card col-12 col-lg-2");
    let dateDiv = document.createElement("p");
    let humidityDiv = document.createElement("p");
    let tempDiv = document.createElement("p");
@@ -68,9 +72,9 @@ function populateForcastDetails (filteredArray){
    let formattedDate = new Date(filteredArray[i].dt*1000).toISOString().split("T")[0];
    
    dateDiv.innerHTML = formattedDate;
-   humidityDiv.innerHTML = filteredArray[i].humidity;
-   tempDiv.innerHTML = filteredArray[i].temp.day;
-   windDiv.innerHTML = filteredArray[i].wind_speed;
+   humidityDiv.innerHTML = "Humidity: " + filteredArray[i].humidity; + "%";
+   tempDiv.innerHTML = "Temperature: " + filteredArray[i].temp.day + "°";
+   windDiv.innerHTML = "Wind Speed: " + filteredArray[i].wind_speed + " MPH";
 
    parentDiv.append(dateDiv, humidityDiv, tempDiv, windDiv);
    forcastDiv.append(parentDiv);
