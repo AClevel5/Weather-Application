@@ -37,9 +37,9 @@ function searchFormSubmit() {
       .then(function (data) {
         //console.log(data);
         cityName.innerHTML = data.name;
-        temp.innerHTML = data.main.temp;
-        wind.innerHTML = data.wind.speed;
-        humidity.innerHTML = data.main.humidity;
+        temp.innerHTML = "Temperature: " + data.main.temp + "°";
+        wind.innerHTML = "Wind Speed: " + data.wind.speed; + "MPH";
+        humidity.innerHTML = "Humidity: " + data.main.humidity; + "%";
         // uvIndex.innerHTML = data.
         latitude = data.coord.lat;
         longitude = data.coord.lon;
@@ -59,7 +59,7 @@ function grabWeatherInfo(lat, lon) {
     })
     .then(function (data) {
       //console.log(data);
-      uvIndex.innerHTML = data.daily[0].uvi;
+      uvIndex.innerHTML = "UV Index: " + data.daily[0].uvi;
       let filteredArray = data.daily.slice(1, 6);
       console.log(filteredArray)
       populateForcastDetails(filteredArray)
@@ -110,7 +110,10 @@ function createPrevSearchList(){
   console.log("NEWLIST", currentList)
 };
 
-//Call Functions:
+// Add Icons to cards and main
+// UVI index coloring
+// Fix bugs on cards and previous search items
+// click on previous search and pulls again
 
 
 //Event Listeners:
