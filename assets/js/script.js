@@ -2,6 +2,7 @@
 var previousSearchEl = document.querySelector("#prevSearches");
 var searchButton = document.querySelector("#searchButton");
 var inputCity = document.querySelector('#inputCity');
+var iconImg = document.querySelector("#iconImg");
 var latitude = [];
 var longitude = [];
 var apiKey = "30be9d6f81ee076d9023bf7273f7e725";
@@ -12,6 +13,7 @@ var wind = document.querySelector("#wind");
 var humidity = document.querySelector("#humidity")
 var uvIndex = document.querySelector("#uvIndex");
 var searchHistory = [];
+var iconUrl = "https://openweathermap.org/img/w/";
 //https://api.openweathermap.org/data/2.5/weather?q=denver&appid=30be9d6f81ee076d9023bf7273f7e725
 
 //Functions:
@@ -20,9 +22,7 @@ function searchFormSubmit() {
   var inputCityText = inputCity.value.trim();
   addSearchHistory(inputCityText)
   storeSearchHistory();
-  console.log(searchHistory);
   inputCity.value = "";
-  //console.log(inputCityText)
 
   if (inputCityText != "")
 
@@ -35,16 +35,17 @@ function searchFormSubmit() {
         return response.json();
       })
       .then(function (data) {
-        //console.log(data);
+        console.log(data);
+        let iconDisplay = iconUrl + data.weather[0].icon + ".png";
+        var image = new Image();
+        image.src = iconDisplay;
+        iconImg.appendChild(image);
         cityName.innerHTML = data.name;
         temp.innerHTML = data.main.temp + "°";
         wind.innerHTML = data.wind.speed + " MPH";
         humidity.innerHTML =  data.main.humidity + "%";
-        // uvIndex.innerHTML = data.
         latitude = data.coord.lat;
         longitude = data.coord.lon;
-        // console.log(latitude);
-        // console.log(longitude);
         grabWeatherInfo(latitude, longitude)
       });
   else
@@ -58,11 +59,8 @@ function grabWeatherInfo(lat, lon) {
       return response.json();
     })
     .then(function (data) {
-      //console.log(data);
       uvIndex.innerHTML = data.daily[0].uvi;
       let filteredArray = data.daily.slice(1, 6);
-      //console.log(filteredArray)
-      console.log(data.daily[0].uvi);
       populateForcastDetails(filteredArray)
       if (data.daily[0].uvi <= 2) {
         uvIndex.setAttribute("class","low");
@@ -118,11 +116,9 @@ function createPrevSearchList() {
     newButton.innerHTML = currentList[i];
     previousSearchEl.append(newButton);
   }
-  console.log("NEWLIST", currentList)
 };
 
 // Add Icons to cards and main
-// UVI index coloring
 // Fix bugs on cards and previous search items
 // click on previous search and pulls again
 
