@@ -37,9 +37,9 @@ function searchFormSubmit() {
       .then(function (data) {
         //console.log(data);
         cityName.innerHTML = data.name;
-        temp.innerHTML = "Temperature: " + data.main.temp + "°";
-        wind.innerHTML = "Wind Speed: " + data.wind.speed + " MPH";
-        humidity.innerHTML = "Humidity: " + data.main.humidity + "%";
+        temp.innerHTML = data.main.temp + "°";
+        wind.innerHTML = data.wind.speed + " MPH";
+        humidity.innerHTML =  data.main.humidity + "%";
         // uvIndex.innerHTML = data.
         latitude = data.coord.lat;
         longitude = data.coord.lon;
@@ -59,10 +59,20 @@ function grabWeatherInfo(lat, lon) {
     })
     .then(function (data) {
       //console.log(data);
-      uvIndex.innerHTML = "UV Index: " + data.daily[0].uvi;
+      uvIndex.innerHTML = data.daily[0].uvi;
       let filteredArray = data.daily.slice(1, 6);
-      console.log(filteredArray)
+      //console.log(filteredArray)
+      console.log(data.daily[0].uvi);
       populateForcastDetails(filteredArray)
+      if (data.daily[0].uvi <= 2) {
+        uvIndex.setAttribute("class","low");
+      }
+      else if (data.daily[0].uvi > 2 && data.daily[0].uvi <= 6) {
+        uvIndex.setAttribute("class","medium");
+      }
+      else (uvIndex > 6)
+        uvIndex.setAttribute("class","high");
+      
     })
 };
 
@@ -84,29 +94,30 @@ function populateForcastDetails(filteredArray) {
     windDiv.innerHTML = "Wind Speed: " + filteredArray[i].wind_speed + " MPH";
 
     parentDiv.append(dateDiv, humidityDiv, tempDiv, windDiv);
-    forcastDiv.append(parentDiv); 
+    forcastDiv.append(parentDiv);
+
   }
   createPrevSearchList()
 };
 
 // add search to an array
-function addSearchHistory(input){
+function addSearchHistory(input) {
   searchHistory.push(input);
 };
 
 //push that array to local storage
-function storeSearchHistory(){
+function storeSearchHistory() {
   localStorage.setItem("City", JSON.stringify(searchHistory));
 }
 
 //create list of cities from local storage
-function createPrevSearchList(){
+function createPrevSearchList() {
   let currentList = JSON.parse(localStorage.getItem("City"));
- for (let i = 0; i < currentList.length; i++) {
-  let newButton = document.createElement("button")
-  newButton.innerHTML = currentList[i];
-  previousSearchEl.append(newButton);
- }
+  for (let i = 0; i < currentList.length; i++) {
+    let newButton = document.createElement("button")
+    newButton.innerHTML = currentList[i];
+    previousSearchEl.append(newButton);
+  }
   console.log("NEWLIST", currentList)
 };
 

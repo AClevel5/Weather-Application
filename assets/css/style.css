@@ -12,3 +12,17 @@
     
 }
 
+.low{
+    background-color: green;
+    border-radius: 3px;
+}
+
+.medium{
+    background-color: yellow;
+    border-radius: 3px;
+}
+
+.high{
+    background-color: red;
+    border-radius: 3px;
+}
