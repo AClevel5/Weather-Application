@@ -26,7 +26,7 @@ function searchFormSubmit() {
 
   if (inputCityText != "")
 
-    fetch("https://api.openweathermap.org/data/2.5/weather?q=" + inputCityText + "&units=metric&appid=" + apiKey, {
+    fetch("https://api.openweathermap.org/data/2.5/weather?q=" + inputCityText + "&units=imperial&appid=" + apiKey, {
       // The browser fetches the resource from the remote server without first looking in the cache.
       // The browser will then update the cache with the downloaded resource.
       cache: 'reload',
@@ -38,8 +38,8 @@ function searchFormSubmit() {
         //console.log(data);
         cityName.innerHTML = data.name;
         temp.innerHTML = "Temperature: " + data.main.temp + "°";
-        wind.innerHTML = "Wind Speed: " + data.wind.speed; + "MPH";
-        humidity.innerHTML = "Humidity: " + data.main.humidity; + "%";
+        wind.innerHTML = "Wind Speed: " + data.wind.speed + " MPH";
+        humidity.innerHTML = "Humidity: " + data.main.humidity + "%";
         // uvIndex.innerHTML = data.
         latitude = data.coord.lat;
         longitude = data.coord.lon;
@@ -53,7 +53,7 @@ function searchFormSubmit() {
 
 //using lat and long from the other AP enter it into one call to grab desired data
 function grabWeatherInfo(lat, lon) {
-  fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=" + exclude + "&appid=" + apiKey)
+  fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=" + exclude + "&units=imperial&appid=" + apiKey)
     .then(function (response) {
       return response.json();
     })
@@ -79,7 +79,7 @@ function populateForcastDetails(filteredArray) {
     let formattedDate = new Date(filteredArray[i].dt * 1000).toISOString().split("T")[0];
 
     dateDiv.innerHTML = formattedDate;
-    humidityDiv.innerHTML = "Humidity: " + filteredArray[i].humidity; + "%";
+    humidityDiv.innerHTML = "Humidity: " + filteredArray[i].humidity + "%";
     tempDiv.innerHTML = "Temperature: " + filteredArray[i].temp.day + "°";
     windDiv.innerHTML = "Wind Speed: " + filteredArray[i].wind_speed + " MPH";
 
