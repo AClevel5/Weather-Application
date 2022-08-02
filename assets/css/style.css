@@ -1,3 +1,4 @@
+
 .custom-jumbotron{
     background-color: #343a40; 
     text-align: center;
@@ -25,4 +26,9 @@
 .high{
     background-color: red;
     border-radius: 3px;
+}
+
+.custom-search{
+    height:350px;
+    overflow:scroll;
 }
