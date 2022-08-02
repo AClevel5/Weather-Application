@@ -18,8 +18,8 @@ var iconUrl = "https://openweathermap.org/img/w/";
 
 //Functions:
 //Grab the City out of the entry field and make the API call to grab weather data
-function searchFormSubmit() {
-  var inputCityText = inputCity.value.trim();
+function searchFormSubmit(inputCityText) {
+  
   addSearchHistory(inputCityText)
   storeSearchHistory();
   inputCity.value = "";
@@ -36,6 +36,7 @@ function searchFormSubmit() {
       })
       .then(function (data) {
         console.log(data);
+        iconImg.innerHTML = "";
         let iconDisplay = iconUrl + data.weather[0].icon + ".png";
         var image = new Image();
         image.src = iconDisplay;
@@ -77,6 +78,7 @@ function grabWeatherInfo(lat, lon) {
 //populate cards info for the 5 day forcast
 function populateForcastDetails(filteredArray) {
   let forcastDiv = document.querySelector("#forcast");
+  forcastDiv.innerHTML = "";
   for (let i = 0; i < filteredArray.length; i++) {
     let parentDiv = document.createElement("div")
     parentDiv.setAttribute("class", "card custom-card col-12 col-lg-2");
@@ -100,8 +102,10 @@ function populateForcastDetails(filteredArray) {
 
 // add search to an array
 function addSearchHistory(input) {
-  searchHistory.push(input);
-};
+  if (!searchHistory.includes(input.toUpperCase())){
+  searchHistory.push(input.toUpperCase());
+  
+}};
 
 //push that array to local storage
 function storeSearchHistory() {
@@ -110,11 +114,19 @@ function storeSearchHistory() {
 
 //create list of cities from local storage
 function createPrevSearchList() {
+  previousSearchEl.innerHTML = "";
   let currentList = JSON.parse(localStorage.getItem("City"));
   for (let i = 0; i < currentList.length; i++) {
+    let listItem = document.createElement("li");
     let newButton = document.createElement("button")
     newButton.innerHTML = currentList[i];
-    previousSearchEl.append(newButton);
+    newButton.addEventListener("click", function(event){
+      console.log(event.target.innerHTML)
+      let targetCity = event.target.innerHTML;
+      searchFormSubmit(targetCity);
+    })
+    listItem.append(newButton);
+    previousSearchEl.append(listItem);
   }
 };
 
@@ -125,4 +137,7 @@ function createPrevSearchList() {
 
 //Event Listeners:
 // Grab input of input box once search is clicked
-searchButton.addEventListener("click", () => searchFormSubmit());
+searchButton.addEventListener("click", () => {
+  var inputCityText = inputCity.value.trim();
+  searchFormSubmit(inputCityText)
+} );

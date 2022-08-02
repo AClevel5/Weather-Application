@@ -20,44 +20,43 @@
         </div>
     </header>
 
-    <main>
+    <main class="container">
         <div class="row">
             <search class="card col-12 col-lg-2 border-0 ">
                 <div class="card-body">
                     <h3>Search for a City:</h3>
                     <input id="inputCity" type="text" class="form-control" placeholder="Enter a City" />
-                    <button id="searchButton" type="button" class="btn btn-dark btn-block mt-2 ">Search</button>
-                
+                    <button id="searchButton" type="button" class="btn btn-dark btn-block mt-2 ">Search</button>  
                 </div>
-                
             </search>
-            <state class="card col-12 col-lg-10 border-1 mt-2">
-                <h3 id="cityName">City</h3>
-                <p id="iconImg"></p>
-                <p>Temperature: <span id="temp"></span></p>
-                <p>Wind Speed: <span id="wind"></span></p>
-                <p>Humidity: <span id="humidity"></span></p>
-                <p>UV Index: <span id="uvIndex"></span></p>
-            </state>
-           
+            <ul id="prevSearches" class ="prevSearches card col-12 col-lg-2 border-0">
+                <!-- <button class="btn btn-block btn-dark mt-2">Austin</button>
+                <button class="btn btn-block btn-dark mt-2">Austin</button>
+                <button class="btn btn-block btn-dark mt-2">Austin</button>
+                <button class="btn btn-block btn-dark mt-2">Austin</button>
+                <button class="btn btn-block btn-dark mt-2">Austin</button> -->
+            </ul>
         
+        </div>
+        <state class="card col-12 col-lg-10 border-1 mt-2">
+            <h3 id="cityName">City</h3>
+            <p id="iconImg"></p>
+            <p>Temperature: <span id="temp"></span></p>
+            <p>Wind Speed: <span id="wind"></span></p>
+            <p>Humidity: <span id="humidity"></span></p>
+            <p>UV Index: <span id="uvIndex"></span></p>
+        </state>
+   
+        <div id="forcast" class="row justify-content-end"><br>
+            <!-- <card class="card col-12 col-lg-2">yo</card>
+            <card class="card col-12 col-lg-2">yo</card>
+            <card class="card col-12 col-lg-2">yo</card>
+            <card class="card col-12 col-lg-2">yo</card>
+            <card class="card col-12 col-lg-2">yo</card> -->
         </div>
        
     </main>
-    <div id="forcast" class="row justify-content-end"><br>
-        <!-- <card class="card col-12 col-lg-2">yo</card>
-        <card class="card col-12 col-lg-2">yo</card>
-        <card class="card col-12 col-lg-2">yo</card>
-        <card class="card col-12 col-lg-2">yo</card>
-        <card class="card col-12 col-lg-2">yo</card> -->
-    </div>
-    <ul id="prevSearches" class ="prevSearches col-lg-2">
-        <!-- <button class="btn btn-block btn-dark mt-2">Austin</button>
-        <button class="btn btn-block btn-dark mt-2">Austin</button>
-        <button class="btn btn-block btn-dark mt-2">Austin</button>
-        <button class="btn btn-block btn-dark mt-2">Austin</button>
-        <button class="btn btn-block btn-dark mt-2">Austin</button> -->
-    </ul>
+
 
 
 </body>
