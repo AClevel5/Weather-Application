@@ -19,7 +19,7 @@ var iconUrl = "https://openweathermap.org/img/w/";
 //Functions:
 //Grab the City out of the entry field and make the API call to grab weather data
 function searchFormSubmit(inputCityText) {
-  
+
   addSearchHistory(inputCityText)
   storeSearchHistory();
   inputCity.value = "";
@@ -35,7 +35,6 @@ function searchFormSubmit(inputCityText) {
         return response.json();
       })
       .then(function (data) {
-        console.log(data);
         iconImg.innerHTML = "";
         let iconDisplay = iconUrl + data.weather[0].icon + ".png";
         var image = new Image();
@@ -44,7 +43,7 @@ function searchFormSubmit(inputCityText) {
         cityName.innerHTML = data.name;
         temp.innerHTML = data.main.temp + "°";
         wind.innerHTML = data.wind.speed + " MPH";
-        humidity.innerHTML =  data.main.humidity + "%";
+        humidity.innerHTML = data.main.humidity + "%";
         latitude = data.coord.lat;
         longitude = data.coord.lon;
         grabWeatherInfo(latitude, longitude)
@@ -64,14 +63,14 @@ function grabWeatherInfo(lat, lon) {
       let filteredArray = data.daily.slice(1, 6);
       populateForcastDetails(filteredArray)
       if (data.daily[0].uvi <= 2) {
-        uvIndex.setAttribute("class","low");
+        uvIndex.setAttribute("class", "low");
       }
       else if (data.daily[0].uvi > 2 && data.daily[0].uvi <= 6) {
-        uvIndex.setAttribute("class","medium");
+        uvIndex.setAttribute("class", "medium");
       }
       else (uvIndex > 6)
-        uvIndex.setAttribute("class","high");
-      
+      uvIndex.setAttribute("class", "high");
+
     })
 };
 
@@ -79,21 +78,28 @@ function grabWeatherInfo(lat, lon) {
 function populateForcastDetails(filteredArray) {
   let forcastDiv = document.querySelector("#forcast");
   forcastDiv.innerHTML = "";
+
   for (let i = 0; i < filteredArray.length; i++) {
     let parentDiv = document.createElement("div")
     parentDiv.setAttribute("class", "card custom-card col-12 col-lg-2");
     let dateDiv = document.createElement("p");
+    let cardIconDiv = document.createElement("p");
     let humidityDiv = document.createElement("p");
     let tempDiv = document.createElement("p");
     let windDiv = document.createElement("p");
     let formattedDate = new Date(filteredArray[i].dt * 1000).toISOString().split("T")[0];
+    let cardIconDisplay = iconUrl + filteredArray[i].weather[0].icon + ".png";
+    var cardImage = new Image();
+    cardImage.src = cardIconDisplay;
+    cardIconDiv.appendChild(cardImage);
 
+    //Change the div contents
     dateDiv.innerHTML = formattedDate;
     humidityDiv.innerHTML = "Humidity: " + filteredArray[i].humidity + "%";
     tempDiv.innerHTML = "Temperature: " + filteredArray[i].temp.day + "°";
     windDiv.innerHTML = "Wind Speed: " + filteredArray[i].wind_speed + " MPH";
 
-    parentDiv.append(dateDiv, humidityDiv, tempDiv, windDiv);
+    parentDiv.append(dateDiv, cardIconDiv, humidityDiv, tempDiv, windDiv);
     forcastDiv.append(parentDiv);
 
   }
@@ -102,17 +108,18 @@ function populateForcastDetails(filteredArray) {
 
 // add search to an array
 function addSearchHistory(input) {
-  if (!searchHistory.includes(input.toUpperCase())){
-  searchHistory.push(input.toUpperCase());
-  
-}};
+  if (!searchHistory.includes(input.toUpperCase())) {
+    searchHistory.push(input.toUpperCase());
+
+  }
+};
 
 //push that array to local storage
 function storeSearchHistory() {
   localStorage.setItem("City", JSON.stringify(searchHistory));
 }
 
-//create list of cities from local storage
+//create list of cities from local storage & add event listener dynamically
 function createPrevSearchList() {
   previousSearchEl.innerHTML = "";
   let currentList = JSON.parse(localStorage.getItem("City"));
@@ -120,7 +127,8 @@ function createPrevSearchList() {
     let listItem = document.createElement("li");
     let newButton = document.createElement("button")
     newButton.innerHTML = currentList[i];
-    newButton.addEventListener("click", function(event){
+    newButton.setAttribute("class", "custom-button");
+    newButton.addEventListener("click", function (event) {
       console.log(event.target.innerHTML)
       let targetCity = event.target.innerHTML;
       searchFormSubmit(targetCity);
@@ -130,14 +138,9 @@ function createPrevSearchList() {
   }
 };
 
-// Add Icons to cards and main
-// Fix bugs on cards and previous search items
-// click on previous search and pulls again
-
-
 //Event Listeners:
 // Grab input of input box once search is clicked
 searchButton.addEventListener("click", () => {
   var inputCityText = inputCity.value.trim();
   searchFormSubmit(inputCityText)
-} );
+});
